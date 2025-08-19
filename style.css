@@ -1,0 +1,40 @@
+:root{ --bg:#0b0b0e; --fg:#f1f1f1; --muted:#9aa0a6; --accent:#d4af37 }
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+  background: url("img/fondo.png") no-repeat center center fixed;
+  background-size: cover;
+  color: var(--fg);
+  display:grid;
+  place-items:center;
+  min-height:100vh;
+  padding:32px;
+}
+
+.container{max-width:920px; width:100%; text-align:center}
+h1{font-weight:700; letter-spacing:.01em; margin:8px 0 8px; font-size:clamp(40px,5vw,64px)}
+p{color:var(--muted); margin:.25rem 0 1.75rem; font-size:clamp(16px,2vw,22px)}
+
+.langs{display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin:1.25rem 0 1.75rem}
+button.lang{display:inline-flex; align-items:center; gap:.6rem; border:1px solid #2a2a2e; background:#121217; color:var(--fg); padding:.9rem 1.25rem; border-radius:9999px; cursor:pointer; font-weight:700; letter-spacing:.02em; box-shadow:inset 0 0 0 1px #000, 0 0 0 1px rgba(255,255,255,.04); transition:background .2s ease, box-shadow .2s ease, border-color .2s ease}
+button.lang .flag{display:inline-flex; width:22px; height:16px; border-radius:2px; overflow:hidden}
+button.lang:hover{background:#17181d}
+button.lang.active{border-color:var(--accent); box-shadow:inset 0 0 0 2px #000, 0 0 0 2px rgba(212,175,55,.9)}
+
+audio{width:100%; outline:none; margin:.5rem 0 0; border-radius:32px}
+
+footer{margin-top:1.25rem; font-size:.95rem; color:var(--muted)}
+a{color:var(--fg)}
+
+.badge{display:inline-block; font-size:.9rem; padding:.35rem .6rem; border:1px solid #333; border-radius:10px; margin-left:.5rem; color:var(--muted); background:#111214}
+
+/* Sombra para mejorar contraste del texto sobre la foto */
+h1, p, footer, .badge {
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition:none!important}
+}
