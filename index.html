@@ -4,56 +4,108 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Connection — Audio Guía</title>
-  <style>
-    :root {
-      --bg:#0b0b0e; 
-      --fg:#f1f1f1; 
-      --muted:#9aa0a6; 
-      --accent:#d4af37;
-    }
-    *{box-sizing:border-box}
-    body {
-      margin:0; 
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif; 
-      background:var(--bg) url("fondo.png") no-repeat center center fixed; 
-      background-size:cover; 
-      color:var(--fg); 
-      display:grid; 
-      place-items:center; 
-      min-height:100vh; 
-      padding:32px
-    }
-    .container {max-width:920px; width:100%; text-align:center}
-    h1 {font-weight:700; letter-spacing:.01em; margin-bottom:24px}
-    p {color:var(--muted); margin-bottom:32px}
-    .flags {display:flex; justify-content:center; gap:16px; flex-wrap:wrap}
-    .flag-btn {
-      border:none; 
-      background:#1a1a1d; 
-      padding:12px 20px; 
-      border-radius:12px; 
-      cursor:pointer; 
-      color:var(--fg); 
-      font-size:16px; 
-      display:flex; 
-      align-items:center; 
-      gap:8px; 
-      transition:background .3s
-    }
-    .flag-btn:hover {background:#2a2a2d}
-    .flag {font-size:20px}
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>The Connection — Audio Guía</h1>
-    <p>Selecciona tu idioma:</p>
-    <div class="flags">
-      <a href="?lang=es"><button class="flag-btn"><span class="flag">🇲🇽</span> Español</button></a>
-      <a href="?lang=en"><button class="flag-btn"><span class="flag">🇺🇸</span> English</button></a>
-      <a href="?lang=it"><button class="flag-btn"><span class="flag">🇮🇹</span> Italiano</button></a>
-      <a href="?lang=pt"><button class="flag-btn"><span class="flag">🇧🇷</span> Português</button></a>
+  <main class="container">
+   
+    <p>Elige un idioma para reproducir el audio.</p>
+
+    <div class="langs" role="tablist" aria-label="Seleccionar idioma">
+      <button class="lang active" role="tab" data-lang="es" aria-selected="true">
+        <span class="flag" aria-hidden="true">
+          <svg viewBox="0 0 3 2" xmlns="http://www.w3.org/2000/svg">
+            <rect width="3" height="2" fill="#AA151B"/>
+            <rect x="0" y="0.4" width="3" height="1.2" fill="#F1BF00"/>
+          </svg>
+        </span>
+        Español
+      </button>
+      <button class="lang" role="tab" data-lang="en" aria-selected="false">
+        <span class="flag" aria-hidden="true">
+          <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
+            <clipPath id="s"><path d="M0,0 v30 h60 v-30 z"/></clipPath>
+            <clipPath id="t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath>
+            <g clip-path="url(#s)">
+              <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+              <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+              <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t)"/>
+              <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+              <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+            </g>
+          </svg>
+        </span>
+        English
+      </button>
+      <button class="lang" role="tab" data-lang="it" aria-selected="false">
+        <span class="flag" aria-hidden="true">
+          <svg viewBox="0 0 3 2" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1" height="2" fill="#009246"/>
+            <rect x="1" width="1" height="2" fill="#fff"/>
+            <rect x="2" width="1" height="2" fill="#ce2b37"/>
+          </svg>
+        </span>
+        Italiano
+      </button>
+      <button class="lang" role="tab" data-lang="pt" aria-selected="false">
+        <span class="flag" aria-hidden="true">
+          <svg viewBox="0 0 3 2" xmlns="http://www.w3.org/2000/svg">
+            <rect width="3" height="2" fill="#006600"/>
+            <rect x="1.2" width="1.8" height="2" fill="#FF0000"/>
+            <polygon points="1.2,1 1.5,0.5 1.8,1 1.5,1.5" fill="#FFDF00"/>
+          </svg>
+        </span>
+        Português
+      </button>
     </div>
-  </div>
+
+    <audio id="player" controls preload="none">
+      <source id="src-mp3" src="AUDIOS/es.mp3" type="audio/mpeg">
+      Tu navegador no soporta audio. <a id="download" href="AUDIOS/es.mp3" download>Descargar</a>
+    </audio>
+    <footer>
+     <!--  <span id="meta" class="badge">CARLO ACUTIS/span> -->
+    </footer>
+  </main>
+
+<script>
+const AUDIO_URLS = {
+  es: { url: "AUDIOS/es.mp3", label: "ES · 128kbps · MP3" },
+  en: { url: "AUDIOS/in.mp3", label: "EN · 128kbps · MP3" },
+  it: { url: "AUDIOS/it.mp3", label: "IT · 128kbps · MP3" },
+  pt: { url: "AUDIOS/pt.mp3", label: "PT · 128kbps · MP3" }
+};
+
+const qs = new URLSearchParams(location.search);
+const preferred = (qs.get("lang") || navigator.language || "es").slice(0,2);
+const startLang = Object.keys(AUDIO_URLS).includes(preferred) ? preferred : "es";
+const player = document.getElementById("player");
+const source = document.getElementById("src-mp3");
+const download = document.getElementById("download");
+const meta = document.getElementById("meta");
+
+function setLang(lang){
+  document.querySelectorAll("button.lang").forEach(b=>{
+    const active = b.dataset.lang===lang;
+    b.classList.toggle("active", active);
+    b.setAttribute("aria-selected", active ? "true":"false");
+  });
+  const data = AUDIO_URLS[lang];
+  if(!data) return;
+  source.src = data.url;
+  if(download) download.href = data.url;
+  if(meta) meta.textContent = data.label;
+  player.pause();
+  player.load();
+  player.play().catch(()=>{ /* autoplay bloqueado */ });
+  history.replaceState(null, "", "?lang="+lang);
+}
+
+document.querySelectorAll("button.lang").forEach(b=>{
+  b.addEventListener("click", ()=> setLang(b.dataset.lang));
+});
+
+setLang(startLang);
+</script>
 </body>
 </html>
