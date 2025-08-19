@@ -4,81 +4,108 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Connection — Audio Guía</title>
-  <style>
-    :root {
-      --bg:#0b0b0e;
-      --fg:#f1f1f1;
-      --muted:#9aa0a6;
-      --accent:#d4af37;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body {
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
-      background: url('fondo.jpeg') no-repeat center center fixed;
-      background-size: cover;
-      color: var(--fg);
-      display: grid;
-      place-items: center;
-      min-height: 100vh;
-      padding: 32px;
-    }
-    .container {
-      max-width: 920px;
-      width: 100%;
-      text-align: center;
-      background: rgba(0,0,0,0.6);
-      padding: 32px;
-      border-radius: 16px;
-    }
-    h1 {
-      font-weight: 700;
-      margin-bottom: 24px;
-      color: var(--accent);
-    }
-    .lang-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-    .lang-buttons button {
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    .lang-buttons img {
-      width: 48px;
-      height: auto;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-    }
-    audio {
-      margin-top: 20px;
-      width: 100%;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>The Connection — Audio Guía</h1>
-    <div class="lang-buttons">
-      <button onclick="setAudio('es')"><img src="https://flagcdn.com/w40/mx.png" alt="Español"></button>
-      <button onclick="setAudio('en')"><img src="https://flagcdn.com/w40/us.png" alt="English"></button>
-      <button onclick="setAudio('it')"><img src="https://flagcdn.com/w40/it.png" alt="Italiano"></button>
-      <button onclick="setAudio('pt')"><img src="https://flagcdn.com/w40/br.png" alt="Português"></button>
-    </div>
-    <audio id="audio" controls>
-      <source src="audio/es.mp3" type="audio/mpeg">
-      Tu navegador no soporta el audio.
-    </audio>
-  </div>
+  <main class="container">
+   
+    <p>Elige un idioma para reproducir el audio.</p>
 
-  <script>
-    function setAudio(lang) {
-      const audio = document.getElementById('audio');
-      audio.src = `audio/${lang}.mp3`;
-      audio.play();
-    }
-  </script>
+    <div class="langs" role="tablist" aria-label="Seleccionar idioma">
+      <button class="lang active" role="tab" data-lang="es" aria-selected="true">
+        <span class="flag" aria-hidden="true">
+          <svg viewBox="0 0 3 2" xmlns="http://www.w3.org/2000/svg">
+            <rect width="3" height="2" fill="#AA151B"/>
+            <rect x="0" y="0.4" width="3" height="1.2" fill="#F1BF00"/>
+          </svg>
+        </span>
+        Español
+      </button>
+      <button class="lang" role="tab" data-lang="en" aria-selected="false">
+        <span class="flag" aria-hidden="true">
+          <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
+            <clipPath id="s"><path d="M0,0 v30 h60 v-30 z"/></clipPath>
+            <clipPath id="t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath>
+            <g clip-path="url(#s)">
+              <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+              <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+              <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4" clip-path="url(#t)"/>
+              <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+              <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+            </g>
+          </svg>
+        </span>
+        English
+      </button>
+      <button class="lang" role="tab" data-lang="it" aria-selected="false">
+        <span class="flag" aria-hidden="true">
+          <svg viewBox="0 0 3 2" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1" height="2" fill="#009246"/>
+            <rect x="1" width="1" height="2" fill="#fff"/>
+            <rect x="2" width="1" height="2" fill="#ce2b37"/>
+          </svg>
+        </span>
+        Italiano
+      </button>
+      <button class="lang" role="tab" data-lang="pt" aria-selected="false">
+        <span class="flag" aria-hidden="true">
+          <svg viewBox="0 0 3 2" xmlns="http://www.w3.org/2000/svg">
+            <rect width="3" height="2" fill="#006600"/>
+            <rect x="1.2" width="1.8" height="2" fill="#FF0000"/>
+            <polygon points="1.2,1 1.5,0.5 1.8,1 1.5,1.5" fill="#FFDF00"/>
+          </svg>
+        </span>
+        Português
+      </button>
+    </div>
+
+    <audio id="player" controls preload="none">
+      <source id="src-mp3" src="AUDIOS/es.mp3" type="audio/mpeg">
+      Tu navegador no soporta audio. <a id="download" href="AUDIOS/es.mp3" download>Descargar</a>
+    </audio>
+    <footer>
+     <!--  <span id="meta" class="badge">CARLO ACUTIS/span> -->
+    </footer>
+  </main>
+
+<script>
+const AUDIO_URLS = {
+  es: { url: "AUDIOS/es.mp3", label: "ES · 128kbps · MP3" },
+  en: { url: "AUDIOS/in.mp3", label: "EN · 128kbps · MP3" },
+  it: { url: "AUDIOS/it.mp3", label: "IT · 128kbps · MP3" },
+  pt: { url: "AUDIOS/pt.mp3", label: "PT · 128kbps · MP3" }
+};
+
+const qs = new URLSearchParams(location.search);
+const preferred = (qs.get("lang") || navigator.language || "es").slice(0,2);
+const startLang = Object.keys(AUDIO_URLS).includes(preferred) ? preferred : "es";
+const player = document.getElementById("player");
+const source = document.getElementById("src-mp3");
+const download = document.getElementById("download");
+const meta = document.getElementById("meta");
+
+function setLang(lang){
+  document.querySelectorAll("button.lang").forEach(b=>{
+    const active = b.dataset.lang===lang;
+    b.classList.toggle("active", active);
+    b.setAttribute("aria-selected", active ? "true":"false");
+  });
+  const data = AUDIO_URLS[lang];
+  if(!data) return;
+  source.src = data.url;
+  if(download) download.href = data.url;
+  if(meta) meta.textContent = data.label;
+  player.pause();
+  player.load();
+  player.play().catch(()=>{ /* autoplay bloqueado */ });
+  history.replaceState(null, "", "?lang="+lang);
+}
+
+document.querySelectorAll("button.lang").forEach(b=>{
+  b.addEventListener("click", ()=> setLang(b.dataset.lang));
+});
+
+setLang(startLang);
+</script>
 </body>
 </html>
